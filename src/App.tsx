@@ -35,7 +35,6 @@ export const App = () => {
       if (message.body.chatId) return
 
       const chatId = message.body.senderData.chatId.split('@')[0]
-      console.log(chats, 'handleChatChange')
 
       const chat = chatHandler(
         chats.find((e) => e.chatId === chatId),
@@ -70,7 +69,7 @@ export const App = () => {
     } else {
       const interval = setInterval(() => {
         receiveAll()
-      }, 500)
+      }, 1500)
 
       return () => clearInterval(interval)
     }

@@ -13,15 +13,18 @@ export const Chat = () => {
   }>()
 
   const [message, setMessage] = useState('')
+  const [disabled, setDisabled] = useState(false)
   const { chatId } = useParams()
   const [chat, _] = useState(chats.find((e) => e.chatId === chatId))
 
   const handleSend = async (e?: React.KeyboardEvent<HTMLInputElement>) => {
     if (message.length && chatId) {
       if ((e && e.key === 'Enter') || !e) {
+        setDisabled(true)
         await sendMessage(id, token, chatId, message)
         handleChat()
         setMessage('')
+        setDisabled(false)
       }
     }
   }
@@ -40,11 +43,18 @@ export const Chat = () => {
         <p>{chatId}</p>
       </header>
       <main className="flex flex-col grow bg-secondary h-full overflow-hidden">
-        <ul className='flex flex-col gap-2 px-2 h-full overflow-scroll py-10'>
+        <ul className="flex flex-col gap-2 px-2 h-full overflow-scroll py-10">
           {chats
             .find((e) => e.chatId === chatId)
             ?.messages.map((msg) => (
-              <li key={msg.timestamp} className={`w-fit max-w-3/4 rounded p-2 bg-opacity-75 ${msg.sender === '0' ? 'bg-green-600 self-end text-end' : ' bg-special'}`}>{msg.textMessage}</li>
+              <li
+                key={msg.timestamp}
+                className={`w-fit max-w-3/4 rounded p-2 bg-opacity-75 ${
+                  msg.sender === '0' ? 'bg-green-600 self-end text-end' : ' bg-special'
+                }`}
+              >
+                {msg.textMessage}
+              </li>
             ))}
         </ul>
       </main>
@@ -54,11 +64,13 @@ export const Chat = () => {
           placeholder="Сообщение"
           onChange={handleChange}
           onKeyDown={handleSend}
+          disabled={disabled}
           value={message}
         />
         <button
           className="p-2 font-bold text-lg px-4 rounded-full bg-special shadow"
           onClick={() => handleSend()}
+          disabled={disabled}
         >
           &gt;
         </button>
