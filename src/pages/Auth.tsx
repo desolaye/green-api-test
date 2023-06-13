@@ -8,7 +8,7 @@ export const Auth = () => {
   const [id, setId] = useState('')
   const [token, setToken] = useState('')
   const [error, setError] = useState({ status: false, message: '' })
-  const [user, setUser] = useRecoilState(userStore)
+  const [_, setUser] = useRecoilState(userStore)
 
   const navigate = useNavigate()
 
